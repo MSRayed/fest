@@ -6,7 +6,7 @@ export default function Home() {
     <main className="h-full bg-cornell-red">
       <div className="flex justify-around items-center p-10">
         <div>
-          <h1 className="text-8xl text-white font-bold">
+          <h1 className="text-6xl md:text-8xl text-white font-bold">
             SCPSC <br /> Cultural <br /> Fest
           </h1>
 

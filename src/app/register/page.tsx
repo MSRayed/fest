@@ -55,7 +55,7 @@ export default function MyForm() {
     <Form {...form}>
       <form
         onSubmit={form.handleSubmit(onSubmit)}
-        className="space-y-8 max-w-3xl mx-auto py-10"
+        className="space-y-8 max-w-3xl mx-auto p-10"
       >
         {/* Title */}
         <h1 className="text-3xl font-bold text-center mb-6">Registration</h1>
