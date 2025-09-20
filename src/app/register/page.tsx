@@ -21,14 +21,20 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { Segment, segments } from "@/lib/utils";
+
+import { useState } from "react";
 
 const formSchema = z.object({
   name: z.string().min(1).max(50),
+  roll_no: z.string().min(1).max(20),
   institute: z.string().min(1).max(50),
   class: z.number().min(1).max(12),
-  contact_no: z.number(),
-  email: z.string(),
-  category: z.string(),
+  contact_no: z.string().min(10).max(15),
+  guardian_contact_no: z.string().min(10).max(15),
+  email: z.string().email(),
+  reference: z.string().optional(),
+  category: z.enum(["Solo", "Group"]),
   segment: z.string(),
 });
 
@@ -36,6 +42,9 @@ export default function MyForm() {
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
   });
+
+  const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
+  const [selectedSegment, setSelectedSegment] = useState<Segment | null>(null);
 
   function onSubmit(values: z.infer<typeof formSchema>) {
     try {
@@ -55,11 +64,11 @@ export default function MyForm() {
     <Form {...form}>
       <form
         onSubmit={form.handleSubmit(onSubmit)}
-        className="space-y-8 max-w-3xl mx-auto p-10"
+        className="space-y-8 max-w-3xl mx-auto py-10"
       >
         {/* Title */}
         <h1 className="text-3xl font-bold text-center mb-6">Registration</h1>
-
+        {/* Name */}
         <FormField
           control={form.control}
           name="name"
@@ -73,7 +82,21 @@ export default function MyForm() {
             </FormItem>
           )}
         />
-
+        {/* Roll No */}
+        <FormField
+          control={form.control}
+          name="roll_no"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Roll No.</FormLabel>
+              <FormControl>
+                <Input placeholder="12345" type="text" {...field} />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+        {/* Institute */}
         <FormField
           control={form.control}
           name="institute"
@@ -91,7 +114,7 @@ export default function MyForm() {
             </FormItem>
           )}
         />
-
+        {/* Class */}
         <FormField
           control={form.control}
           name="class"
@@ -105,21 +128,35 @@ export default function MyForm() {
             </FormItem>
           )}
         />
-
+        {/* Contact No */}
         <FormField
           control={form.control}
           name="contact_no"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Contact no.</FormLabel>
+              <FormLabel>Contact No.</FormLabel>
               <FormControl>
-                <Input placeholder="01XXXXXXXXX" type="number" {...field} />
+                <Input placeholder="01XXXXXXXXX" type="text" {...field} />
               </FormControl>
               <FormMessage />
             </FormItem>
           )}
         />
-
+        {/* Guardian Contact No */}
+        <FormField
+          control={form.control}
+          name="guardian_contact_no"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Guardian Contact No.</FormLabel>
+              <FormControl>
+                <Input placeholder="01XXXXXXXXX" type="text" {...field} />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+        {/* Email */}
         <FormField
           control={form.control}
           name="email"
@@ -133,86 +170,99 @@ export default function MyForm() {
             </FormItem>
           )}
         />
-
-        {/* Category field */}
+        {/* Reference */}
+        <FormField
+          control={form.control}
+          name="reference"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>
+                Reference (Campus Ambassador / Club Partner){" "}
+                <span className="text-sm text-gray-500">(optional)</span>
+              </FormLabel>
+              <FormControl>
+                <Input
+                  placeholder="Enter name (if any)"
+                  type="text"
+                  {...field}
+                />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+        {/* Category */}
         <FormField
           control={form.control}
           name="category"
           render={({ field }) => (
             <FormItem>
               <FormLabel>Category</FormLabel>
-              <Select onValueChange={field.onChange} defaultValue={field.value}>
+              <Select
+                onValueChange={(val) => {
+                  field.onChange(val);
+                  setSelectedCategory(val);
+                  form.setValue("segment", ""); // reset segment
+                }}
+                defaultValue={field.value}
+              >
                 <FormControl>
                   <SelectTrigger>
                     <SelectValue placeholder="Select a category" />
                   </SelectTrigger>
                 </FormControl>
                 <SelectContent>
-                  <SelectItem value="P">Primary (1-5)</SelectItem>
-                  <SelectItem value="J">Junior (6-8)</SelectItem>
-                  <SelectItem value="S">Secondary (9-10)</SelectItem>
-                  <SelectItem value="HS">Higher Secondary (11-12)</SelectItem>
+                  <SelectItem value="Solo">Solo</SelectItem>
+                  <SelectItem value="Group">Group</SelectItem>
                 </SelectContent>
               </Select>
               <FormMessage />
             </FormItem>
           )}
         />
-
-        {/* Segment field */}
-        <FormField
-          control={form.control}
-          name="segment"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Segment</FormLabel>
-              <Select onValueChange={field.onChange} defaultValue={field.value}>
-                <FormControl>
-                  <SelectTrigger>
-                    <SelectValue placeholder="Select a segment" />
-                  </SelectTrigger>
-                </FormControl>
-                <SelectContent>
-                  <SelectItem value="nazrul_sangeet">
-                    Nazrul Sangeet (J,S,HS) - Solo
-                  </SelectItem>
-                  <SelectItem value="rabindra_sangeet">
-                    Rabindra Sangeet (J,S,HS) - Solo
-                  </SelectItem>
-                  <SelectItem value="modern_singing">
-                    Modern Singing (J,S,HS) - Solo
-                  </SelectItem>
-                  <SelectItem value="folk_dance">
-                    Folk Dance (J,S,HS) - Solo, Group
-                  </SelectItem>
-                  <SelectItem value="modern_dance">
-                    Modern Dance (J,S,HS) - Solo, Group
-                  </SelectItem>
-                  <SelectItem value="recitation">
-                    Recitation (J,S,HS) - Solo
-                  </SelectItem>
-                  <SelectItem value="drawing">
-                    Drawing (P,J,S,HS) - Solo
-                  </SelectItem>
-                  <SelectItem value="extempore_speech">
-                    Extempore Speech (J,S,HS) - Solo
-                  </SelectItem>
-                  <SelectItem value="photography">
-                    Photography Exhibition
-                  </SelectItem>
-                  <SelectItem value="wall_magazine">Wall Magazine</SelectItem>
-                  <SelectItem value="book_quiz">Book Based Quiz</SelectItem>
-                  <SelectItem value="movie_quiz">Movie Quiz</SelectItem>
-                  <SelectItem value="battle_of_bands">
-                    Battle of Bands
-                  </SelectItem>
-                </SelectContent>
-              </Select>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-
+        {/* Segment */}
+        {selectedCategory && (
+          <FormField
+            control={form.control}
+            name="segment"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Segment</FormLabel>
+                <Select
+                  onValueChange={(val) => {
+                    field.onChange(val); // still update react-hook-form
+                    const seg = segments.find((s) => s.key === val) || null;
+                    setSelectedSegment(seg);
+                  }}
+                  value={field.value}
+                >
+                  <FormControl>
+                    <SelectTrigger>
+                      <SelectValue placeholder="Select a segment" />
+                    </SelectTrigger>
+                  </FormControl>
+                  <SelectContent>
+                    {segments.map(
+                      (seg) =>
+                        selectedCategory &&
+                        seg.categories.includes(selectedCategory) && (
+                          <SelectItem key={seg.key} value={seg.key}>
+                            {seg.label}
+                          </SelectItem>
+                        )
+                    )}
+                  </SelectContent>
+                </Select>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+        )}
+        {selectedSegment && (
+          <div className="mt-2 text-lg text-white font-bold bg-cornell-red p-4 rounded-2xl">
+            Fee: {selectedSegment.fee[selectedCategory!]} BDT
+          </div>
+        )}
         <Button type="submit">Submit</Button>
       </form>
     </Form>
