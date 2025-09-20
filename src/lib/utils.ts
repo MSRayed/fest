@@ -5,6 +5,8 @@ export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
 }
 
+export type Category = "Solo" | "Group";
+
 export interface Segment {
   key: string;
   label: string;

@@ -21,7 +21,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { Segment, segments } from "@/lib/utils";
+import { Category, Segment, segments } from "@/lib/utils";
 
 import { useState } from "react";
 
@@ -43,7 +43,9 @@ export default function MyForm() {
     resolver: zodResolver(formSchema),
   });
 
-  const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
+  const [selectedCategory, setSelectedCategory] = useState<Category | null>(
+    null
+  );
   const [selectedSegment, setSelectedSegment] = useState<Segment | null>(null);
 
   function onSubmit(values: z.infer<typeof formSchema>) {
@@ -201,7 +203,7 @@ export default function MyForm() {
               <Select
                 onValueChange={(val) => {
                   field.onChange(val);
-                  setSelectedCategory(val);
+                  setSelectedCategory(val as Category);
                   form.setValue("segment", ""); // reset segment
                 }}
                 defaultValue={field.value}
