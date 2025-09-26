@@ -74,7 +74,7 @@ interface TimeCardProps {
 function TimeCard({ value, label }: TimeCardProps) {
   return (
     <div className="flex flex-col items-center">
-      <div className="bg-brown text-white w-16 h-16 md:w-20 md:h-20 rounded-lg flex items-center justify-center text-2xl md:text-3xl font-bold mb-2 border-2 border-[#FFDF5A] shadow-md font-playfair">
+      <div className="bg-brown text-white w-16 h-16 md:w-20 md:h-20 rounded-lg flex items-center justify-center text-2xl md:text-3xl font-bold mb-2 border-2 border-yellow shadow-md font-playfair">
         {value.toString().padStart(2, "0")}
       </div>
       <span className="text-xs md:text-sm font-medium text-gray-700 font-poppins uppercase tracking-wider">
