@@ -80,7 +80,7 @@ export default function MyForm() {
       },
       body: JSON.stringify(values, null, 2),
     }).then(async (response) => {
-      let json = await response.json();
+      const json = await response.json();
 
       console.log(json.message);
     });
