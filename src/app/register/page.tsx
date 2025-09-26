@@ -1,6 +1,5 @@
 "use client";
 
-import { toast } from "sonner";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
@@ -26,16 +25,38 @@ import { Category, Segment, segments } from "@/lib/utils";
 import { useState } from "react";
 
 const formSchema = z.object({
-  name: z.string().min(1).max(50),
-  roll_no: z.string().min(1).max(20),
-  institute: z.string().min(1).max(50),
-  class: z.number().min(1).max(12),
-  contact_no: z.string().min(10).max(15),
-  guardian_contact_no: z.string().min(10).max(15),
-  email: z.string().email(),
+  access_key: z.string("Access key is required."),
+  name: z
+    .string("Name is required.")
+    .min(1, "Name cannot be empty.")
+    .max(50, "Name must be at most 50 characters long."),
+  roll_no: z
+    .string("Roll number is required.")
+    .min(1, "Roll number cannot be empty.")
+    .max(20, "Roll number must be at most 20 characters long."),
+  institute: z
+    .string("Institute name is required.")
+    .min(1, "Institute name cannot be empty.")
+    .max(50, "Institute name must be at most 50 characters long."),
+  class: z
+    .string("Class is required.")
+    .min(1, "Class cannot be empty.")
+    .max(12, "Class must be between 1 and 12."),
+  contact_no: z
+    .string("Contact number is required.")
+    .min(10, "Contact number must be at least 10 digits.")
+    .max(15, "Contact number must not exceed 15 digits."),
+  guardian_contact_no: z
+    .string("Guardian contact number is required.")
+    .min(10, "Guardian contact number must be at least 10 digits.")
+    .max(15, "Guardian contact number must not exceed 15 digits."),
+  email: z
+    .string("Email is required.")
+    .email("Please enter a valid email address."),
   reference: z.string().optional(),
-  category: z.enum(["Solo", "Group"]),
-  segment: z.string(),
+  category: z.enum(["Solo", "Group"], "Category is required."),
+  segment: z.string("Segment is required."),
+  trans_id: z.string("Transaction ID is required."),
 });
 
 export default function MyForm() {
@@ -48,28 +69,38 @@ export default function MyForm() {
   );
   const [selectedSegment, setSelectedSegment] = useState<Segment | null>(null);
 
-  function onSubmit(values: z.infer<typeof formSchema>) {
-    try {
-      console.log(values);
-      toast(
-        <pre className="mt-2 w-[340px] rounded-md bg-slate-950 p-4">
-          <code className="text-white">{JSON.stringify(values, null, 2)}</code>
-        </pre>
-      );
-    } catch (error) {
-      console.error("Form submission error", error);
-      toast.error("Failed to submit the form. Please try again.");
-    }
-  }
+  const onSubmit = async (values: z.infer<typeof formSchema>) => {
+    console.log(values);
+
+    await fetch("https://api.web3forms.com/submit", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Accept: "application/json",
+      },
+      body: JSON.stringify(values, null, 2),
+    }).then(async (response) => {
+      let json = await response.json();
+
+      console.log(json.message);
+    });
+  };
 
   return (
     <Form {...form}>
       <form
         onSubmit={form.handleSubmit(onSubmit)}
-        className="space-y-8 max-w-3xl mx-auto py-10"
+        className="space-y-8 max-w-3xl mx-auto py-10 mb-24"
       >
         {/* Title */}
         <h1 className="text-3xl font-bold text-center mb-6">Registration</h1>
+
+        <input
+          type="hidden"
+          value="cf448f71-8edd-4eb7-bbe4-8bd1c997066e"
+          {...form.register("access_key")}
+        />
+
         {/* Name */}
         <FormField
           control={form.control}
@@ -263,7 +294,24 @@ export default function MyForm() {
         {selectedSegment && (
           <div className="mt-2 text-lg text-white font-bold bg-cornell-red p-4 rounded-2xl">
             Fee: {selectedSegment.fee[selectedCategory!]} BDT
+            <p>bkash no: 01XXXXXXXXX</p>
           </div>
+        )}
+        {/* Transaction id */}
+        {selectedSegment && (
+          <FormField
+            control={form.control}
+            name="trans_id"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Transaction Id</FormLabel>
+                <FormControl>
+                  <Input placeholder="12345678" type="text" {...field} />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
         )}
         <Button type="submit">Submit</Button>
       </form>
