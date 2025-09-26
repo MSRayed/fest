@@ -1,7 +1,5 @@
 import CountdownTimer from "@/components/countdown";
-import { Button } from "@/components/ui/button";
 import Image from "next/image";
-import Link from "next/link";
 
 export default function Home() {
   const eventDate = new Date(2025, 11, 11);
