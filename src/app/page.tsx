@@ -1,5 +1,6 @@
 import CountdownTimer from "@/components/countdown";
 import Image from "next/image";
+import Link from "next/link";
 
 export default function Home() {
   const eventDate = new Date(2025, 11, 11);
@@ -12,7 +13,7 @@ export default function Home() {
   });
 
   return (
-    <main className="h-full bg-cornell-red">
+    <main className="h-full bg-primary">
       <div>
         <Image
           src="/banner.png"
@@ -23,12 +24,21 @@ export default function Home() {
           priority
         />
 
-        <section className="py-8 bg-white">
+        <section className="py-8 bg-white text-center">
           <div className="container mx-auto">
             <CountdownTimer
               targetDate={eventDate}
               title={`Countdown to ${formattedDate}`}
             />
+
+            {/* Register Button */}
+            <div className="mt-6">
+              <Link href="/register">
+                <button className="px-6 py-3 rounded-lg bg-brown text-white font-semibold hover:bg-red-700 transition-colors">
+                  Register Now
+                </button>
+              </Link>
+            </div>
           </div>
         </section>
       </div>

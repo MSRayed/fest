@@ -6,7 +6,7 @@
 @theme {
   --color-*: initial;
   --color-white: #fff;
-  --color-cornell-red: #bd1e1e;
+  --color-brown: #680e28;
 }
 
 @theme inline {
