@@ -292,7 +292,7 @@ export default function MyForm() {
           />
         )}
         {selectedSegment && (
-          <div className="mt-2 text-lg text-white font-bold bg-cornell-red p-4 rounded-2xl">
+          <div className="mt-2 text-lg text-white font-bold bg-brown p-4 rounded-2xl">
             Fee: {selectedSegment.fee[selectedCategory!]} BDT
             <p>bkash no: 01XXXXXXXXX</p>
           </div>
