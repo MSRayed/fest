@@ -27,9 +27,7 @@ export default function MapComponent({ title = "Our location" }: MapProps) {
           url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
         />
         <Marker position={[23.907417089970746, 90.26793493439301]}>
-          <Popup>
-            A pretty CSS3 popup. <br /> Easily customizable.
-          </Popup>
+          <Popup>Savar Cantonment Public School and College</Popup>
         </Marker>
       </MapContainer>
     </main>
