@@ -1,7 +1,11 @@
+"use client";
+
 import CountdownTimer from "@/components/countdown";
 import Image from "next/image";
 import Link from "next/link";
 import MapComponent from "@/components/map";
+import { useMemo } from "react";
+import dynamic from "next/dynamic";
 
 export default function Home() {
   const eventDate = new Date(2025, 11, 11);
@@ -12,6 +16,15 @@ export default function Home() {
     month: "long",
     day: "numeric",
   });
+
+  const Map = useMemo(
+    () =>
+      dynamic(() => import("@/components/map"), {
+        loading: () => <p>A map is loading</p>,
+        ssr: false,
+      }),
+    []
+  );
 
   return (
     <main className="h-full pb-36">
@@ -27,7 +40,7 @@ export default function Home() {
         />
 
         {/* Countdown + Register */}
-        <section className="py-10 bg-yellow text-center">
+        <section className="py-8 bg-yellow/20 border-y-2 border-yellow/30">
           <div className="container mx-auto">
             <CountdownTimer
               targetDate={eventDate}
@@ -35,7 +48,7 @@ export default function Home() {
             />
 
             {/* Register Button */}
-            <div className="mt-8">
+            <div className="mt-8 flex justify-center">
               <Link href="/register">
                 <button className="px-8 py-3 rounded-lg bg-brown text-white font-semibold shadow-md hover:shadow-lg hover:scale-105 hover:bg-red-700 transition-transform transition-colors">
                   Register Now
@@ -65,7 +78,7 @@ export default function Home() {
               {/* Venue */}
               <div className="bg-white p-6 rounded-2xl shadow hover:shadow-md">
                 <h3 className="text-xl font-semibold text-brown mb-2">Venue</h3>
-                <p>SCPSCCC Main Auditorium</p>
+                <p>Savar Cantonment Public School and College</p>
                 <p>Savar, Dhaka, Bangladesh</p>
               </div>
             </div>
@@ -74,8 +87,7 @@ export default function Home() {
 
         {/* Location */}
         <div className="px-10">
-          <h2 className="text-3xl font-bold mb-6 text-brown">Our Location</h2>
-          <MapComponent />
+          <Map />
         </div>
       </div>
     </main>

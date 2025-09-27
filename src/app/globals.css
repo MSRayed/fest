@@ -3,6 +3,32 @@
 
 @custom-variant dark (&:is(.dark *));
 
+@layer base {
+  * {
+    @apply border-border;
+  }
+  body {
+    @apply bg-white;
+  }
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
+    font-family: var(--font-playfair);
+  }
+  p,
+  span,
+  div,
+  button,
+  input,
+  select,
+  textarea {
+    font-family: var(--font-poppins);
+  }
+}
+
 @theme {
   --color-*: initial;
   --color-white: #fff;

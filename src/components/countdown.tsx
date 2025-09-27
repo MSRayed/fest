@@ -51,10 +51,8 @@ export default function CountdownTimer({
   return (
     <div className={`${className}`}>
       <div className="flex items-center justify-center mb-4">
-        <Clock className="h-6 w-6 text-primary mr-2 animate-pulse-slow" />
-        <h3 className="text-xl font-bold text-primary font-playfair">
-          {title}
-        </h3>
+        <Clock className="h-6 w-6 text-brown mr-2 animate-pulse-slow" />
+        <h3 className="text-xl font-bold text-brown font-playfair">{title}</h3>
       </div>
       <div className="flex justify-center space-x-4 md:space-x-8">
         <TimeCard value={days} label="Days" />
